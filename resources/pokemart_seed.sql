@@ -23,6 +23,18 @@ CREATE TABLE shop_inventory_table (
     PRIMARY KEY (item_id)
 );
 
+-- bag_inventory_table
+-- same as shop_inventory_table only with bag_id;
+CREATE TABLE bag_inventory_table (
+    bag_id INT NOT NULL AUTO_INCREMENT,
+    item_name VARCHAR(64) NOT NULL,
+    item_description VARCHAR(256),
+    item_type VARCHAR(32),
+    item_cost INT NOT NULL,
+    item_inventory_level INT NOT NULL,
+    PRIMARY KEY (bag_id)
+);
+
 -- pokemon_bank_table 
 -- schema (pokemon_number *int*, pokemon_name *string*, pokemon_type *string*, pokemon_level *int*, pokemon_is_shiny *bool*)
 CREATE TABLE pokemon_bank_table (
@@ -31,7 +43,7 @@ CREATE TABLE pokemon_bank_table (
     pokemon_name VARCHAR(64) NOT NULL,
     pokemon_type VARCHAR(32) NOT NULL,
     pokemon_level INT NOT NULL,
-    pokemon_is_shiny BOOL DEFAULT "false"
+    pokemon_is_shiny BOOL DEFAULT false,
     -- other stats would go here if we were tracking Pokemon Stats
     -- hp
     -- str
