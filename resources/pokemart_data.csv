@@ -1,0 +1,12 @@
+Pokeball, Used to catch wild Pokemon., ball, 200, 10
+Potion, Used to heal Pokemon by 50hp., potion, 300, 7
+Antidote, Used to remove PSN status from a Pokemon., potion, 100, 5
+Parlyz Heal, Used to remove PLZ status from a Pokemon., potion, 200, 5
+Burn Heal, Used to remove BRN status form a Pokemon., potion, 250, 5
+Revive, Remove KO status from one Pokemon., misc, 1500, 2
+Escape Rope, Exit any dungeon., misc, 550, 6
+Repel, Keeps wild Pokemon away., misc, 350, 20
+TM42 (Dream Eater), Teaches a Pokemon the 'Dream Eater' move., TM, 2000, 1
+Old Rod, Used to catch Magikarp, misc, 1, 1
+Bitter Berry, Cures confusion., berry, 5, 22
+Razz Berry, Makes wild Pokemon easier to capture., berry, 10, 50
