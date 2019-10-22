@@ -53,25 +53,110 @@ inquirer.prompt([
         if (err) {
             console.log(err);
         } else {
-            // connection is good and we can now speak to the database on your local system.
-            goOnline();
+            mainMenu();
         };
     });
 
+    function mainMenu(){
+            // connection is good and we can now speak to the database on your local system.
+            inquirer.prompt([
+                {
+                    type: "list",
+                    name: "mainMenu",
+                    message: "What would you like to do?",
+                    choices: ["Shop", "Sell", "Bag", "Exit"]
+                }
+            ]).then(response => {
+                let selectedMainMenuItem = response.mainMenu;
+                switch (selectedMainMenuItem) {
+                    case "Shop":
+                        menuShop();
+                    break;
+                    case "Sell":
+                        menuSell();
+                    break;
+                    case "Bag":
+                        menuBag();
+                    break;
+                    case "Exit":
+                        menuExit();
+                    break;
+                    default:
+                        console.log(`Somethings gone wrong.`);
+                        connection.end();
+                    break;
+                };
+            });
+    };
+
+    function menuShop(){
+        inquirer.prompt([
+            {
+                type: "list",
+                name: "shopMenuSelection",
+                message: "What can I do for you?",
+                choices: ["Buy", "Look Around", "Main Menu"]
+            }
+        ]).then(shopMenu => {
+            
+            switch (shopMenu.shopMenuSelection) {
+                case "Buy":
+                        buyAnItem();
+                    break;
+                case "Look Around":
+                    connection.query(`SELECT * FROM ${pokemart}`, function(err, res){
+                        console.table(res);
+                        mainMenu();
+                    });
+                    break;
+                case "Main Menu":
+                    mainMenu();
+                    break;
+                default:
+                    break;
+            };
+            
+        });
+    };
+
+    function menuSell(){
+        console.log(`comming soon...`);
+        connection.end();
+    };
+
+    function menuBag(){
+
+        connection.query(`SELECT * FROM ${bag}`, function(err, res){
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(``);
+                console.log(`-----------------`);
+                console.table(res);
+                console.log(`-----------------`);
+                mainMenu();
+            };
+        });
+
+    };
+
+    function menuExit(){
+        console.log(`Goodbye.`);
+        connection.end();
+    };
+
     // after connection is made this function runs.
-    function goOnline() {
+    function buyAnItem() {
         connection.query(`SELECT * FROM ${pokemart}`, function(err, res){
             if (err) {
                 console.log(err);
             } else {
-                // console.table(res);
-                // here we have the full inventory.
 
                 // take the returned value of res and grab all the item names.
-                // we are going to use them in our next inquirer question.
                 let itemNames = [];
                 for (i = 0; i < res.length; i++){
                     itemNames.push(res[i].item_name);
+                    
                 };
                 
                 inquirer.prompt([
@@ -88,6 +173,7 @@ inquirer.prompt([
                     console.table(res[itemNames.indexOf(returnedValue.selectedItem)]);
                     connection.end();
                 });
+
             };
         });
     };
