@@ -247,11 +247,11 @@ inquirer.prompt([
                     // change back doYouHaveIt to false. You dont have to do this but it's good practice.
                     doYouHaveIt = false;
 
-                    console.log(`you already have that item!`);
+                    //console.log(`you already have that item!`);
                     updateItemInBagDB(selectedItemObject);
 
                 } else if (doYouHaveIt === false){
-                    console.log('you do not have that item');
+                    //console.log('you do not have that item');
                     //console.log(selectedItemObject);
                     addItemToBagDB(selectedItemObject);
                 };
@@ -264,8 +264,8 @@ inquirer.prompt([
 
             let arrayThatObject = [];
             for(elements in mehVariable ){
-                console.log(elements);
-                console.log(mehVariable[elements]);
+                // console.log(elements);
+                // console.log(mehVariable[elements]);
                 if (isNaN(mehVariable[elements])){
                     arrayThatObject.push(`"${mehVariable[elements]}"`);
                 } else {
@@ -274,14 +274,14 @@ inquirer.prompt([
                 
             };
 
-            mehVariable[item_inventory_level] = 1;
+            mehVariable['item_inventory_level'] = 1;
 
             console.log(`INSERT INTO ${bag} (bag_id, item_name, item_description, item_type, item_cost, item_inventory_level) VALUES(${arrayThatObject})`);
             connection.query(`INSERT INTO ${bag} (bag_id, item_name, item_description, item_type, item_cost, item_inventory_level) VALUES(${arrayThatObject})`, function(err, res){
                 if(err){
                     console.log(err)
                 } else {
-                    console.log(`You have purchased ${mehVariable[item_name]}`);
+                    console.log(`You have purchased ${mehVariable['item_name']}`);
                     menuShop();
                 };
             });
