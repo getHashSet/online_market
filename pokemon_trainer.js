@@ -121,7 +121,7 @@ inquirer.prompt([
 
     function menuSell() {
 
-        connection.query(`SELECT * FROM ${bag}`, function (err, res){
+        connection.query(`SELECT * FROM ${bag}`, function (err, res) {
             let itemNames = [];
             for (i = 0; i < res.length; i++) {
                 itemNames.push(res[i].item_name);
@@ -144,26 +144,26 @@ inquirer.prompt([
                 // Remove 1 from that items inventory.
                 itemObjectInSellQuery.item_inventory_level--;
                 // if the new total is 0 then remove it from the bag. Otherwise update the total in inventory.
-                if (itemObjectInSellQuery.item_inventory_level <= 0){
+                if (itemObjectInSellQuery.item_inventory_level <= 0) {
 
                     //remove item using id index.
-                    connection.query(`DELETE FROM ${bag} WHERE bag_id = ${itemObjectInSellQuery.bag_id};`, function (err, data){
+                    connection.query(`DELETE FROM ${bag} WHERE bag_id = ${itemObjectInSellQuery.bag_id};`, function (err, data) {
 
-                        connection.query(`UPDATE shop_inventory_table SET item_inventory_level = item_inventory_level + 1 WHERE item_id = ${itemObjectInSellQuery.bag_id};`, function (err, finalData){
-                            if (err){ console.error(err)};
+                        connection.query(`UPDATE shop_inventory_table SET item_inventory_level = item_inventory_level + 1 WHERE item_id = ${itemObjectInSellQuery.bag_id};`, function (err, finalData) {
+                            if (err) { console.error(err) };
 
                             console.log(`You have sold ${itemObjectInSellQuery.item_name} for ${sellPrice}. You have none left.`);
                             mainMenu();
-                       
+
                         });
-                     });
+                    });
 
                 } else {
 
                     //update item index with new value.
-                    connection.query(`UPDATE ${bag} SET item_inventory_level = ${itemObjectInSellQuery.item_inventory_level} WHERE bag_id = "${itemObjectInSellQuery.bag_id}"`, function (err, data){
-                        connection.query(`UPDATE shop_inventory_table SET item_inventory_level = item_inventory_level + 1 WHERE item_id = ${itemObjectInSellQuery.bag_id};`, function (err, finalData){
-                            if (err){ console.error(err)};
+                    connection.query(`UPDATE ${bag} SET item_inventory_level = ${itemObjectInSellQuery.item_inventory_level} WHERE bag_id = "${itemObjectInSellQuery.bag_id}"`, function (err, data) {
+                        connection.query(`UPDATE shop_inventory_table SET item_inventory_level = item_inventory_level + 1 WHERE item_id = ${itemObjectInSellQuery.bag_id};`, function (err, finalData) {
+                            if (err) { console.error(err) };
 
                             console.log(`You have sold ${itemObjectInSellQuery.item_name} for ${sellPrice}. You have ${itemObjectInSellQuery.item_inventory_level} left.`);
                             mainMenu();
@@ -284,23 +284,23 @@ inquirer.prompt([
                 // check the res array for objects.
                 for (i = 0; i < res.length; i++) {
                     // check the objects for keys
-                   
-                        //console.log(res[i].bag_id + " == " + itemId);
-                        // check the keys for values compaired to itemId
-                        if (res[i].bag_id == itemId){
-                            doYouHaveIt = true;
-                        } else {
-                        };
+
+                    //console.log(res[i].bag_id + " == " + itemId);
+                    // check the keys for values compaired to itemId
+                    if (res[i].bag_id == itemId) {
+                        doYouHaveIt = true;
+                    } else {
+                    };
                 };
 
-                if (doYouHaveIt === true){
+                if (doYouHaveIt === true) {
                     // change back doYouHaveIt to false. You dont have to do this but it's good practice.
                     doYouHaveIt = false;
 
                     //console.log(`you already have that item!`);
                     updateItemInBagDB(selectedItemObject);
 
-                } else if (doYouHaveIt === false){
+                } else if (doYouHaveIt === false) {
                     //console.log('you do not have that item');
                     //console.log(selectedItemObject);
                     addItemToBagDB(selectedItemObject);
@@ -308,7 +308,7 @@ inquirer.prompt([
             };
         });
 
-        function addItemToBagDB(selectedItemObject){
+        function addItemToBagDB(selectedItemObject) {
 
             // grab the object and give it a new name.
             const mehVariable = selectedItemObject;
@@ -317,23 +317,23 @@ inquirer.prompt([
             mehVariable['item_inventory_level'] = 1;
 
             let arrayThatObject = [];
-            for(elements in mehVariable ){
+            for (elements in mehVariable) {
                 // console.log(elements);
                 // console.log(mehVariable[elements]);
-                if (isNaN(mehVariable[elements])){
+                if (isNaN(mehVariable[elements])) {
                     arrayThatObject.push(`"${mehVariable[elements]}"`);
                 } else {
                     arrayThatObject.push(mehVariable[elements]);
                 };
-                
+
             };
 
             console.log(mehVariable['item_inventory_level']);
 
 
             //console.log(`INSERT INTO ${bag} (bag_id, item_name, item_description, item_type, item_cost, item_inventory_level) VALUES(${arrayThatObject})`);
-            connection.query(`INSERT INTO ${bag} (bag_id, item_name, item_description, item_type, item_cost, item_inventory_level) VALUES(${arrayThatObject})`, function(err, res){
-                if(err){
+            connection.query(`INSERT INTO ${bag} (bag_id, item_name, item_description, item_type, item_cost, item_inventory_level) VALUES(${arrayThatObject})`, function (err, res) {
+                if (err) {
                     console.log(err)
                 } else {
                     console.log(`You have purchased ${mehVariable['item_name']}`);
@@ -345,9 +345,9 @@ inquirer.prompt([
 
         // comment this out. You are here.
         function updateItemInBagDB(item) {
-           
-            connection.query(`UPDATE ${bag} SET item_inventory_level = item_inventory_level + 1 WHERE bag_id = ${item.item_id}`, function(err, res){
-                if (err){
+
+            connection.query(`UPDATE ${bag} SET item_inventory_level = item_inventory_level + 1 WHERE bag_id = ${item.item_id}`, function (err, res) {
+                if (err) {
                     console.log(err);
                 } else {
                     console.log(`You have purchased ${item.item_name}`);

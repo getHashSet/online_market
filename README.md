@@ -129,9 +129,17 @@ You will be provided the following options
 * Bag
 * Exit
 
+Be sure to use your mySQL/database_server id and password to connect.
+
+<img style="height: 255px" src="resources/images/password.jpg" alt="screen shot of username and password log in using Node.js"/>
+
 You can start by checking what is already in your inventory by using the `Bag` menu item.
 
+<img style="height: 75px" src="resources/images/menu.jpg" alt="screen shot of the menu"/>
+
 Or see what item(s) are for sale by selecting the `Look Around` sub-menu item inside of the `Shop` menu.
+
+<img style="height: 255px" src="resources/images/inventories.jpg" alt="screen shot both inventory systems"/>
 
 From here the Pokemart will display if item(s) are sold out or if you can keep buying the.
 
@@ -141,7 +149,11 @@ This application is stable and will display when item(s) are out of inventory in
 
 Or not-disply the items you have run out of in your own inventory.
 
+<img style="height: 255px" src="resources/images/create.jpg" alt="screen shot items being added to database"/>
+
 Have all the fun of shopping in the Pokemon world without having to pick up your DS. Here on Pokemart!
+
+<img style="height: 255px" src="resources/images/old_rod.jpg" alt="screen shot of the old rod being purchased and sold back to the pokemart."/>
 
 [Back to top](#)
 
