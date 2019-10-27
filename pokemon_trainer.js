@@ -120,8 +120,58 @@ inquirer.prompt([
     };
 
     function menuSell() {
-        console.log(`comming soon...`);
-        connection.end();
+
+        connection.query(`SELECT * FROM ${bag}`, function (err, res){
+            let itemNames = [];
+            for (i = 0; i < res.length; i++) {
+                itemNames.push(res[i].item_name);
+
+            };
+
+            inquirer.prompt({
+                name: "itemNameInPrompt",
+                message: "What item did you want to sell?",
+                type: "list",
+                choices: itemNames
+            }).then(answer => {
+
+                let itemNumberInArray = itemNames.indexOf(answer.itemNameInPrompt);
+                let itemObjectInSellQuery = res[itemNumberInArray];
+                let sellPrice = itemObjectInSellQuery.item_cost / 2;
+                sellPrice < 1 ? sellPrice = 1 : null;
+                //console.log(itemObjectInSellQuery);
+
+                // Remove 1 from that items inventory.
+                itemObjectInSellQuery.item_inventory_level--;
+                // if the new total is 0 then remove it from the bag. Otherwise update the total in inventory.
+                if (itemObjectInSellQuery.item_inventory_level <= 0){
+
+                    //remove item using id index.
+                    connection.query(`DELETE FROM ${bag} WHERE bag_id = ${itemObjectInSellQuery.bag_id};`, function (err, data){
+
+                        connection.query(`UPDATE shop_inventory_table SET item_inventory_level = item_inventory_level + 1 WHERE item_id = ${itemObjectInSellQuery.bag_id};`, function (err, finalData){
+                            if (err){ console.error(err)};
+
+                            console.log(`You have sold ${itemObjectInSellQuery.item_name} for ${sellPrice}. You have none left.`);
+                            mainMenu();
+                       
+                        });
+                     });
+
+                } else {
+
+                    //update item index with new value.
+                    connection.query(`UPDATE ${bag} SET item_inventory_level = ${itemObjectInSellQuery.item_inventory_level} WHERE bag_id = "${itemObjectInSellQuery.bag_id}"`, function (err, data){
+                        connection.query(`UPDATE shop_inventory_table SET item_inventory_level = item_inventory_level + 1 WHERE item_id = ${itemObjectInSellQuery.bag_id};`, function (err, finalData){
+                            if (err){ console.error(err)};
+
+                            console.log(`You have sold ${itemObjectInSellQuery.item_name} for ${sellPrice}. You have ${itemObjectInSellQuery.item_inventory_level} left.`);
+                            mainMenu();
+                        });
+                    });
+                };
+            });
+        });
     };
 
     function menuBag() {
@@ -260,7 +310,11 @@ inquirer.prompt([
 
         function addItemToBagDB(selectedItemObject){
 
+            // grab the object and give it a new name.
             const mehVariable = selectedItemObject;
+            // set the inventory level of the object to 1 before we add the object to mySQL.
+            // original object value not changed. (this will let us re-use the object later if needed.)
+            mehVariable['item_inventory_level'] = 1;
 
             let arrayThatObject = [];
             for(elements in mehVariable ){
@@ -274,9 +328,10 @@ inquirer.prompt([
                 
             };
 
-            mehVariable['item_inventory_level'] = 1;
+            console.log(mehVariable['item_inventory_level']);
 
-            console.log(`INSERT INTO ${bag} (bag_id, item_name, item_description, item_type, item_cost, item_inventory_level) VALUES(${arrayThatObject})`);
+
+            //console.log(`INSERT INTO ${bag} (bag_id, item_name, item_description, item_type, item_cost, item_inventory_level) VALUES(${arrayThatObject})`);
             connection.query(`INSERT INTO ${bag} (bag_id, item_name, item_description, item_type, item_cost, item_inventory_level) VALUES(${arrayThatObject})`, function(err, res){
                 if(err){
                     console.log(err)
